@@ -43,19 +43,19 @@ public class MainController {
         return "register"; // Return the login.html template
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody User loginUser) {
-        try {
-            // Authenticate user
-            User authenticatedUser = userService.authenticate(loginUser.getUsername(), loginUser.getPassword());
-            // Return response (you might want to return a JWT token or session data here)
-            System.out.println("Login");
-            return ResponseEntity.ok(authenticatedUser);
-        } catch (Exception e) {
-            throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "Username or Password is incorrect", e);
-        }
-    }
+//    @PostMapping("/login")
+//    public ResponseEntity<?> loginUser(@RequestBody User loginUser) {
+//        try {
+//            // Authenticate user
+//            User authenticatedUser = userService.authenticate(loginUser.getUsername(), loginUser.getPassword());
+//            // Return response (you might want to return a JWT token or session data here)
+//            System.out.println("Login");
+//            return ResponseEntity.ok(authenticatedUser);
+//        } catch (Exception e) {
+//            throw new ResponseStatusException(
+//                    HttpStatus.UNAUTHORIZED, "Username or Password is incorrect", e);
+//        }
+//    }
 
 //    @PostMapping("/login")
 //    public ResponseEntity<?> loginUser(@RequestBody User loginUser) {

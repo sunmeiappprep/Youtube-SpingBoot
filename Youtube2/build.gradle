@@ -1,11 +1,11 @@
 plugins {
     id 'java'
-    id("org.springframework.boot") version "3.2.2"
-    id("io.spring.dependency-management") version "1.1.4"
+    id 'org.springframework.boot' version '3.2.0'
+    id 'io.spring.dependency-management' version '1.1.4'
 }
 
-group = 'org.example'
-version = '1.0-SNAPSHOT'
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 repositories {
@@ -21,6 +21,14 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
     implementation 'javax.servlet:javax.servlet-api:4.0.1'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    // tag::security-dependencies[]
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    //  Temporary explicit version to fix Thymeleaf bug
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
+    testImplementation 'org.springframework.security:spring-security-test'
+    // end::security-dependencies[]
 }
 
 test {
