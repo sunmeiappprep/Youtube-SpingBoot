@@ -19,7 +19,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     runtimeOnly 'com.h2database:h2'
-    implementation 'io.jsonwebtoken:jjwt:0.9.1'
     implementation 'javax.servlet:javax.servlet-api:4.0.1'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -29,6 +28,20 @@ dependencies {
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
     testImplementation 'org.springframework.security:spring-security-test'
     // end::security-dependencies[]
+    // JAXB API
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
+
+// JAXB Runtime
+    implementation 'org.glassfish.jaxb:jaxb-runtime:3.0.2'
+
+// Activation
+    implementation 'jakarta.activation:jakarta.activation-api:2.0.1'
+
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2' // Or jjwt-gson for Gson
+
+
 }
 
 test {
