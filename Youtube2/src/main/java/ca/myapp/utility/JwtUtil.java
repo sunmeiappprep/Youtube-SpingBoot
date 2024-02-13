@@ -14,11 +14,11 @@ public class JwtUtil {
 
 
 
-    private String secret = "v3ryS#cur3K3y!2024$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+    private String secret = "8Zz5tw0Ionm3XPZZfN0NOml3z9FMfmpgXwovR9fp6ryDIoGRM8EPHAB6iHsc0fb";
 
     public String generateToken(String username) {
         System.out.println("Generating token for user: " + username);
-
+        byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
         // Current time and expiration
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
@@ -32,15 +32,14 @@ public class JwtUtil {
         System.out.println("Username: " + username);
         System.out.println("Issued At: " + now);
         System.out.println("Expiration: " + exp);
-        // Be cautious with logging the secret in a real environment
-        String encodedSecret = Base64.getEncoder().encodeToString(secret.getBytes());
 
         try {
+            // Directly use the secret.getBytes(StandardCharsets.UTF_8) without Base64 encoding
             String token = Jwts.builder()
                     .setSubject(username)
                     .setIssuedAt(now)
                     .setExpiration(exp)
-                    .signWith(SignatureAlgorithm.HS256, secret.getBytes(StandardCharsets.UTF_8))
+                    .signWith(SignatureAlgorithm.HS256, keyBytes)
                     .compact();
 
             System.out.println("Token generated: " + token);
@@ -51,6 +50,7 @@ public class JwtUtil {
             return null;
         }
     }
+
 
     public Boolean validateToken(String token, String username) {
         final String usernameInToken = getUsernameFromToken(token);
@@ -71,7 +71,8 @@ public class JwtUtil {
     }
 
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
+        return Jwts.parser().setSigningKey(keyBytes).parseClaimsJws(token).getBody();
     }
 
     private Boolean isTokenExpired(String token) {

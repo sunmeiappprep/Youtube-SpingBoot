@@ -3,6 +3,7 @@ import ca.myapp.models.User; // Import the User class
 import ca.myapp.repository.UserRepository;
 import ca.myapp.service.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +42,15 @@ public class UserController {
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED, "Username or Password is incorrect", e);
         }
+    }
+
+    @GetMapping("/testing")
+    public String testingEndpoint(Authentication authentication) {
+        String username = authentication.getName(); // Get the username of the authenticated user
+        // Log, store, or use the username as needed
+        System.out.println("Endpoint '/testing' accessed by: " + username);
+
+        return "Accessed by: " + username;
     }
 
     @GetMapping("/login")

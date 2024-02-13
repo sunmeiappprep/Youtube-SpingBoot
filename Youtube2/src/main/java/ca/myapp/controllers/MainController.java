@@ -15,7 +15,9 @@ import ca.myapp.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
+import ca.myapp.utility.MyService;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 ;
 
@@ -62,7 +64,6 @@ public class MainController {
     public ResponseEntity<?> loginUser(@RequestBody User loginUser) {
         try {
             User authenticatedUser = userService.authenticate(loginUser.getUsername(), loginUser.getPassword());
-            System.out.println("asdasd");
             System.out.println(authenticatedUser.getUsername());
 
             final String jwtToken = jwtUtil.generateToken(authenticatedUser.getUsername());
@@ -73,14 +74,15 @@ public class MainController {
     }
 
     @GetMapping("/testing")
-    public ResponseEntity<String> testingEndpoint(Authentication authentication) {
+    public ResponseEntity<?>  testingEndpoint(Authentication authentication) {
+        System.out.println("Endpoint '/testing' accessed by: " );
         String username = authentication.getName(); // Get the username of the authenticated user
         // Log, store, or use the username as needed
         System.out.println("Endpoint '/testing' accessed by: " + username);
 
-        return ResponseEntity.ok(username);
-
+        return ResponseEntity.ok("asdasdasd");
     }
+
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {

@@ -41,16 +41,13 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        System.out.println("asdas");
         http
-                // Use lambda to configure CSRF
-                .csrf(csrf -> csrf.disable())
-                // Configure session management to be stateless
+                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // Configure antMatchers
                 .authorizeRequests(auth -> auth
                         .requestMatchers("/login", "/register","/api/register","/api/login").permitAll()
                         .anyRequest().authenticated())
-                // Add JWT token filter
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -62,19 +59,6 @@ public class WebSecurityConfig {
     public AuthenticationManager authenticationManagerBean(HttpSecurity http) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class).build();
     }
-
-
-
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .logout(logout -> logout
-                        .logoutUrl("/logout")  // URL to trigger logout (can be customized)
-                        .logoutSuccessUrl("/login?logout")  // Redirect after logout
-                        .deleteCookies("JSESSIONID")  // Delete session cookie
-                        .invalidateHttpSession(true)  // Invalidate session
-                );
-    }
-
 
 
     // ... (other beans like PasswordEncoder, UserDetailsService, etc.)
