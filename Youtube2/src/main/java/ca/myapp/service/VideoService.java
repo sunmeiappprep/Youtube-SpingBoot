@@ -26,9 +26,7 @@ public class VideoService {
     }
 
     public Video createVideo(VideoRequestDto request) {
-        System.out.println(request.getUserId());
-        System.out.println(request.getTitle());
-        System.out.println(request.getUrl());
+
         User uploader = userRepository.findById(request.getUserId())
                 .orElseThrow(() ->
                         new ResponseStatusException(
@@ -36,6 +34,7 @@ public class VideoService {
                                 "User not found with id: " + request.getUserId()
                         )
                 );
+        System.out.println(uploader);
 
         Video video = new Video();
         video.setTitle(request.getTitle());

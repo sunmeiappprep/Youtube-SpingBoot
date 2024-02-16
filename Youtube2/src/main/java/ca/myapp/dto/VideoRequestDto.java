@@ -42,4 +42,14 @@ public class VideoRequestDto {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return "VideoRequestDto{" +
+                "userId=" + userId +
+                ", title='" + title + '\'' +
+                ", url='" + url + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

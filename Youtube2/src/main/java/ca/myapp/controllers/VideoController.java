@@ -3,18 +3,16 @@ import ca.myapp.dto.VideoRequestDto;
 import ca.myapp.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ca.myapp.models.Video;
-import ca.myapp.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.server.ResponseStatusException;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/video")
 public class VideoController {
-
+    private static final Logger logger = LoggerFactory.getLogger(VideoController.class);
     @Autowired
     private VideoService videoService;
 
@@ -29,21 +27,11 @@ public class VideoController {
         }
     }
 
-//    @Override
-//    public String toString() {
-//        return "Video{" +
-//                "id=" + id +
-//                ", title='" + title + '\'' +
-//                ", description='" + description + '\'' +
-//                ", url='" + url + '\'' +
-//                ", uploader=" + (uploader != null ? uploader.getId() : "null") + // Assuming 'uploader' has an 'id' field
-//                '}';
-//    }
-
-
 
     @PostMapping("/")
     public ResponseEntity<Video> createVideo(@RequestBody VideoRequestDto videoRequestDto) {
+        logger.info("Received video creation request: {}", videoRequestDto.toString());
+
         Video video = videoService.createVideo(videoRequestDto);
         return new ResponseEntity<>(video, HttpStatus.CREATED);
     }
