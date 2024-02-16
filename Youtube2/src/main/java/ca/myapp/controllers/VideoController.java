@@ -1,4 +1,5 @@
 package ca.myapp.controllers;
+import ca.myapp.dto.VideoRequestDto;
 import ca.myapp.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,8 +10,8 @@ import ca.myapp.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
-@Controller
 @CrossOrigin
+@RestController
 @RequestMapping("/api/video")
 public class VideoController {
 
@@ -28,11 +29,23 @@ public class VideoController {
         }
     }
 
+//    @Override
+//    public String toString() {
+//        return "Video{" +
+//                "id=" + id +
+//                ", title='" + title + '\'' +
+//                ", description='" + description + '\'' +
+//                ", url='" + url + '\'' +
+//                ", uploader=" + (uploader != null ? uploader.getId() : "null") + // Assuming 'uploader' has an 'id' field
+//                '}';
+//    }
+
+
+
     @PostMapping("/")
-    public ResponseEntity<Video> postVideo(@RequestBody Video video) {
-        Video savedVideo = videoService.postVideo(video);
-        System.out.println("asdsad");
-        return new ResponseEntity<>(savedVideo, HttpStatus.CREATED);
+    public ResponseEntity<Video> createVideo(@RequestBody VideoRequestDto videoRequestDto) {
+        Video video = videoService.createVideo(videoRequestDto);
+        return new ResponseEntity<>(video, HttpStatus.CREATED);
     }
 }
 //POST /videos for uploading a new video.

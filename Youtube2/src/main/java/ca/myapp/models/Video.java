@@ -58,6 +58,15 @@ public class Video {
         this.description = description;
     }
 
+    public void setUploader(User uploader) {
+        this.uploader = uploader;
+    }
+
+    public Long getUserId() {
+        return uploader != null ? uploader.getId() : null;
+    }
+
+
 //    public Set<Comment> getComments() {
 //        return comments;
 //    }

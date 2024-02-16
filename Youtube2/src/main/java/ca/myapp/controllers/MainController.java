@@ -58,6 +58,32 @@ public class MainController {
 //                    HttpStatus.UNAUTHORIZED, "Username or Password is incorrect", e);
 //        }
 //    }
+    public class LoginResponse {
+        private User user;
+        private String jwtToken;
+
+        public LoginResponse(User user, String jwtToken) {
+            this.user = user;
+            this.jwtToken = jwtToken;
+        }
+
+        // Getters and Setters
+        public User getUser() {
+            return user;
+        }
+
+        public void setUser(User user) {
+            this.user = user;
+        }
+
+        public String getJwtToken() {
+            return jwtToken;
+        }
+
+        public void setJwtToken(String jwtToken) {
+            this.jwtToken = jwtToken;
+        }
+    }
 
 
     @PostMapping("/login")
@@ -67,7 +93,8 @@ public class MainController {
             System.out.println(authenticatedUser.getUsername());
 
             final String jwtToken = jwtUtil.generateToken(authenticatedUser.getUsername());
-            return ResponseEntity.ok(jwtToken); // Return JWT token to client
+            LoginResponse response = new LoginResponse(authenticatedUser, jwtToken);
+            return ResponseEntity.ok(response); // Return both User and JWT token
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Username or Password is incorrect", e);
         }
