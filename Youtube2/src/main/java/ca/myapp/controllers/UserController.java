@@ -46,9 +46,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody User loginUser) {
         try {
-            // Authenticate user
             User authenticatedUser = userService.authenticate(loginUser.getUsername(), loginUser.getPassword());
-            // Return response (you might want to return a JWT token or session data here)
             System.out.println("Login Success");
             return ResponseEntity.ok(authenticatedUser);
         } catch (Exception e) {
@@ -68,7 +66,7 @@ public class UserController {
 
     @GetMapping("/login")
     public String login() {
-        return "login"; // Return the login.html template
+        return "login";
     }
 
     @GetMapping("/video/{uploaderId}")
@@ -76,9 +74,9 @@ public class UserController {
         List<Video> listOfVideo = videoService.getVideosByUploaderId(uploaderId);
         System.out.println(listOfVideo);
         if (listOfVideo.isEmpty()) {
-            return ResponseEntity.noContent().build(); // Return 204 No Content if the list is empty
+            return ResponseEntity.noContent().build(); // Return 204
         }
-        return ResponseEntity.ok(listOfVideo); // Return 200 OK with the list of videos
+        return ResponseEntity.ok(listOfVideo); // Return 200
     }
 
 }

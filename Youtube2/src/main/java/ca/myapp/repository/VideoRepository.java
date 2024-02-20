@@ -8,5 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface VideoRepository extends JpaRepository<Video, Long> {
+
+    //returns a List of Video obj that belongs to the uploaderId
     List<Video> findByUploaderId(Long uploaderId);
 }

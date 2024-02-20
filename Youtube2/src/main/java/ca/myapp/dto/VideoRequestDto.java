@@ -9,8 +9,6 @@ public class VideoRequestDto {
     private String url;
     private String description;
 
-    // Maps the JSON property 'user_id' to this field
-    @JsonProperty("user_id")
     public Long getUserId() {
         return userId;
     }

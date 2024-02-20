@@ -26,12 +26,14 @@ public class VideoService {
 
 
     public Video findById(Long id) throws Exception {
+        //return a video obj
         return videoRepository.findById(id)
                 .orElseThrow(() -> new Exception("There is no video with that id"));
     }
 
     public Video createVideo(VideoRequestDto request) {
-
+        //use the DTO to break down the incoming body and you can use override toString.
+        // passed the user id to userRep to find the user obj and map that to the uploader
         User uploader = userRepository.findById(request.getUserId())
                 .orElseThrow(() ->
                         new ResponseStatusException(
@@ -41,12 +43,12 @@ public class VideoService {
                 );
         System.out.println(uploader);
 
+        //create a Video obj name video and set the params
         Video video = new Video();
         video.setTitle(request.getTitle());
         video.setUrl(request.getUrl());
         video.setDescription(request.getDescription());
         video.setUploader(uploader);
-        System.out.println(uploader);
 
         return videoRepository.save(video);
     }
@@ -59,12 +61,10 @@ public class VideoService {
         Optional<Video> videoOptional = videoRepository.findById(videoId);
         if (videoOptional.isPresent()) {
             Video existingVideo = videoOptional.get();
-            // Update the existing video with new details. Adjust according to your Video class structure
+            // Update the existing video with new details.
             existingVideo.setTitle(videoDetails.getTitle());
             existingVideo.setDescription(videoDetails.getDescription());
             existingVideo.setUrl(videoDetails.getUrl());
-            // Add more fields to update as needed
-
             return videoRepository.save(existingVideo); // Save and return the updated video
         } else {
             throw new RuntimeException("Video not found with id " + videoId); // Handle this exception appropriately
@@ -73,7 +73,6 @@ public class VideoService {
 
     @Transactional
     public void deleteVideo(Long videoId) {
-        // Optional check to see if the video exists before deletion
         if (!videoRepository.existsById(videoId)) {
             throw new RuntimeException("Video not found with id: " + videoId);
         }

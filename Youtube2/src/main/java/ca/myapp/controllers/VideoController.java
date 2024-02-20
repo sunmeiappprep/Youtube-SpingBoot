@@ -53,7 +53,7 @@ public class VideoController {
     @DeleteMapping("/{videoId}")
     public ResponseEntity<?> deleteVideo(@PathVariable Long videoId) {
         videoService.deleteVideo(videoId);
-        return ResponseEntity.ok().build(); // Respond with 200 OK or consider 204 No Content
+        return ResponseEntity.ok().build();
     }
 
 }

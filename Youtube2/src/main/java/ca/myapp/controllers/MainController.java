@@ -58,7 +58,7 @@ public class MainController {
 //                    HttpStatus.UNAUTHORIZED, "Username or Password is incorrect", e);
 //        }
 //    }
-    public class LoginResponse {
+    public static class LoginResponse {
         private User user;
         private String jwtToken;
 
@@ -91,7 +91,6 @@ public class MainController {
         try {
             User authenticatedUser = userService.authenticate(loginUser.getUsername(), loginUser.getPassword());
             System.out.println(authenticatedUser.getUsername());
-
             final String jwtToken = jwtUtil.generateToken(authenticatedUser.getUsername());
             LoginResponse response = new LoginResponse(authenticatedUser, jwtToken);
             return ResponseEntity.ok(response); // Return both User and JWT token
@@ -104,7 +103,6 @@ public class MainController {
     public ResponseEntity<?>  testingEndpoint(Authentication authentication) {
         System.out.println("Endpoint '/testing' accessed by: " );
         String username = authentication.getName(); // Get the username of the authenticated user
-        // Log, store, or use the username as needed
         System.out.println("Endpoint '/testing' accessed by: " + username);
 
         return ResponseEntity.ok("asdasdasd");
