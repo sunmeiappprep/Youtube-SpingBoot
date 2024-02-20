@@ -1,7 +1,9 @@
 package ca.myapp.controllers;
 import ca.myapp.models.User; // Import the User class
+import ca.myapp.models.Video;
 import ca.myapp.repository.UserRepository;
 import ca.myapp.service.UserService;
+import ca.myapp.service.VideoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import java.util.List;
+
+
 
 @RestController
 @RequestMapping("/api/user")
@@ -17,6 +22,14 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private final VideoService videoService;
+
+    @Autowired
+    public UserController(VideoService videoService) {
+        this.videoService = videoService;
+    }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
@@ -58,6 +71,14 @@ public class UserController {
         return "login"; // Return the login.html template
     }
 
-
+    @GetMapping("/video/{uploaderId}")
+    public ResponseEntity<List<Video>> getVideosByUploaderId(@PathVariable Long uploaderId) {
+        List<Video> listOfVideo = videoService.getVideosByUploaderId(uploaderId);
+        System.out.println(listOfVideo);
+        if (listOfVideo.isEmpty()) {
+            return ResponseEntity.noContent().build(); // Return 204 No Content if the list is empty
+        }
+        return ResponseEntity.ok(listOfVideo); // Return 200 OK with the list of videos
+    }
 
 }

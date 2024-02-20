@@ -8,13 +8,21 @@ import ca.myapp.models.Video;
 import org.springframework.http.ResponseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/api/video")
 public class VideoController {
     private static final Logger logger = LoggerFactory.getLogger(VideoController.class);
     @Autowired
-    private VideoService videoService;
+    private final VideoService videoService;
+
+    @Autowired
+    public VideoController(VideoService videoService) {
+        this.videoService = videoService;
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getVideoById(@PathVariable("id") Long id) throws Exception {
@@ -35,6 +43,19 @@ public class VideoController {
         Video video = videoService.createVideo(videoRequestDto);
         return new ResponseEntity<>(video, HttpStatus.CREATED);
     }
+
+    @PutMapping("/{videoId}")
+    public ResponseEntity<Video> updateVideo(@PathVariable Long videoId, @RequestBody Video videoDetails) {
+        Video updatedVideo = videoService.updateVideo(videoId, videoDetails);
+        return ResponseEntity.ok(updatedVideo);
+    }
+
+    @DeleteMapping("/{videoId}")
+    public ResponseEntity<?> deleteVideo(@PathVariable Long videoId) {
+        videoService.deleteVideo(videoId);
+        return ResponseEntity.ok().build(); // Respond with 200 OK or consider 204 No Content
+    }
+
 }
 //POST /videos for uploading a new video.
 //GET /videos to list videos.
