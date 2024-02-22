@@ -67,19 +67,14 @@ public class Video {
     }
 
 
-//    public Set<Comment> getComments() {
-//        return comments;
-//    }
-
-//    @OneToMany(mappedBy = "video", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private Set<Comment> comments = new HashSet<>();
-//
-//    @ManyToMany
-//    @JoinTable(
-//            name = "video_likes",
-//            joinColumns = @JoinColumn(name = "video_id"),
-//            inverseJoinColumns = @JoinColumn(name = "user_id")
-//    )
-//    private Set<User> likes = new HashSet<>();
+    @Override
+    public String toString() {
+        return "Video{" +
+                "uploader=" + uploader +
+                ", title='" + title + '\'' +
+                ", url='" + url + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 
 }

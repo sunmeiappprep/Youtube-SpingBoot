@@ -1,6 +1,7 @@
 package ca.myapp.service;
 
 import ca.myapp.dto.VideoRequestDto;
+import ca.myapp.exception.idNotFoundException;
 import ca.myapp.models.User;
 import ca.myapp.models.Video;
 import ca.myapp.repository.UserRepository;
@@ -74,7 +75,7 @@ public class VideoService {
     @Transactional
     public void deleteVideo(Long videoId) {
         if (!videoRepository.existsById(videoId)) {
-            throw new RuntimeException("Video not found with id: " + videoId);
+            throw new idNotFoundException("Video not found with id: " + videoId);
         }
         videoRepository.deleteById(videoId);
     }

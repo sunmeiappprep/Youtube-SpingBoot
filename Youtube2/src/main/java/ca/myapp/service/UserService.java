@@ -8,6 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ca.myapp.models.User;
 import ca.myapp.repository.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
 
@@ -48,4 +50,11 @@ public class UserService implements UserDetailsService {
             throw new RuntimeException("Password incorrect");
         }
     }
+
+    public User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // Assuming the username is the principal
+        return userRepository.findByUsername(username);
+    }
+
 }

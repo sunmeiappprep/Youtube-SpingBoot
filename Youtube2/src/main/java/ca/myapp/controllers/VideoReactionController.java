@@ -27,7 +27,7 @@ public class VideoReactionController {
             videoReactionService.addReaction(request.getVideoId(), request.getUserId(), request.isLiked());
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error Adding Reaction");
         }
     }
 
@@ -42,7 +42,7 @@ public class VideoReactionController {
             return ResponseEntity.ok(arr);
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in getting Like or Dislike");
         }
     }
 
