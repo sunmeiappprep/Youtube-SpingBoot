@@ -48,10 +48,16 @@ public class CommentController {
 
     @DeleteMapping("/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable Long commentId) {
-            User currentUser = userService.getAuthenticatedUser();
-            System.out.println(currentUser);
             commentService.deleteComment(commentId);
             return ResponseEntity.ok("Successful Comment Delete");
+    }
+
+    @PutMapping("/edit/{commentId}")
+    public ResponseEntity<?> updateComment(@PathVariable("commentId") Long commentId,@RequestBody CommentDto request){
+        System.out.println("edit comment");
+        System.out.println(request.getText());
+        commentService.updateComment(commentId, request.getText());
+        return ResponseEntity.ok("Successful Updated Comment");
     }
 
 }

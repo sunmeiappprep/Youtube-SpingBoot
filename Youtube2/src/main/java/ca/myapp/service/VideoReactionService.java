@@ -16,26 +16,26 @@ public class VideoReactionService {
     //create a different Model,Controller,Service,Rep because of separation of concerns
     private final VideoReactionRepository videoReactionRepository;
     private final VideoRepository videoRepository;
-    private final UserRepository userRepository;
 
+    private final UserService userService;
     @Autowired
-    public VideoReactionService(VideoReactionRepository videoReactionRepository, VideoRepository videoRepository, UserRepository userRepository) {
+    public VideoReactionService(VideoReactionRepository videoReactionRepository, VideoRepository videoRepository, UserService userService) {
         this.videoReactionRepository = videoReactionRepository;
         this.videoRepository = videoRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @Transactional
-    public void addReaction(Long videoId, Long userId, boolean liked) {
+    public void addReaction(Long videoId, boolean liked) {
         //Find Video and User obj
+
+        User currentUser = userService.getAuthenticatedUser();
+
         Video video = videoRepository.findById(videoId)
                 .orElseThrow(() -> new RuntimeException("Video not found with id: " + videoId));
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
-
         //Find if reaction exist by matching video and user id
-        Optional<VideoReaction> existingReaction = videoReactionRepository.findByVideoIdAndUserId(videoId, userId);
+        Optional<VideoReaction> existingReaction = videoReactionRepository.findByVideoIdAndUserId(videoId, currentUser.getId());
         if (existingReaction.isPresent()) {
             //If it exists and it the same one then delete it
             //If it exists but not the same as incoming liked then swap it
@@ -53,7 +53,7 @@ public class VideoReactionService {
             //bound to video obj
             newReaction.setVideo(video);
             //bound to user obj
-            newReaction.setUser(user);
+            newReaction.setUser(currentUser);
             // set to true or false
             newReaction.setLiked(liked);
             videoReactionRepository.save(newReaction);

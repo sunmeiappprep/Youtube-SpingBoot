@@ -24,7 +24,7 @@ public class VideoReactionController {
     public ResponseEntity<?> addReaction(@RequestBody ReactionRequest request) {
         System.out.println(request);
         try {
-            videoReactionService.addReaction(request.getVideoId(), request.getUserId(), request.isLiked());
+            videoReactionService.addReaction(request.getVideoId(), request.isLiked());
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error Adding Reaction");

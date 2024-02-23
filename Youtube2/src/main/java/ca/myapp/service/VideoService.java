@@ -18,14 +18,13 @@ import java.util.Optional;
 
 @Service
 public class VideoService {
-    @Autowired
-    private VideoRepository videoRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-
-
+    private final VideoRepository videoRepository;
+    private final UserService userService;
+    @Autowired // This annotation is optional if there's only one constructor
+    public VideoService(VideoRepository videoRepository, UserService userService) {
+        this.videoRepository = videoRepository;
+        this.userService = userService;
+    }
     public Video findById(Long id) throws Exception {
         //return a video obj
         return videoRepository.findById(id)
@@ -35,21 +34,16 @@ public class VideoService {
     public Video createVideo(VideoRequestDto request) {
         //use the DTO to break down the incoming body and you can use override toString.
         // passed the user id to userRep to find the user obj and map that to the uploader
-        User uploader = userRepository.findById(request.getUserId())
-                .orElseThrow(() ->
-                        new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
-                                "User not found with id: " + request.getUserId()
-                        )
-                );
-        System.out.println(uploader);
+        User currentUser = userService.getAuthenticatedUser();
+
+        System.out.println(currentUser);
 
         //create a Video obj name video and set the params
         Video video = new Video();
         video.setTitle(request.getTitle());
         video.setUrl(request.getUrl());
         video.setDescription(request.getDescription());
-        video.setUploader(uploader);
+        video.setUploader(currentUser);
 
         return videoRepository.save(video);
     }

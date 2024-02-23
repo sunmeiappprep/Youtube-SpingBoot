@@ -69,6 +69,15 @@ public class Comment {
         this.video = video;
     }
 
+    @Override
+    public String toString() {
+        return "CommentDto{" +
+                "userId=" + user +
+                ", videoId='" + video + '\'' +
+                ", liked='" + text + '\'' +
+                '}';
+    }
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
