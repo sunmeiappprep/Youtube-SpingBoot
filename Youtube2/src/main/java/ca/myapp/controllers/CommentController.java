@@ -35,7 +35,7 @@ public class CommentController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addComment (@RequestBody CommentDto request) {
-            Comment comment = commentService.createComment( request.getUserId(), request.getVideoId(),request.getText());
+            Comment comment = commentService.createComment(request.getVideoId(),request.getText());
             return ResponseEntity.ok(comment);
     }
 

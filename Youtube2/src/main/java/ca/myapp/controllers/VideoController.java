@@ -50,6 +50,15 @@ public class VideoController {
         return ResponseEntity.ok(updatedVideo);
     }
 
+    @GetMapping("/videos")
+    public ResponseEntity<List<Video>> getVideos(@RequestParam String seed, @RequestParam int page) {
+        // Use the seed and page to fetch videos in a consistent pseudo-random order
+        List<Video> videos = videoService.getVideos(seed, page,20);
+        return ResponseEntity.ok(videos);
+    }
+
+
+
     @DeleteMapping("/{videoId}")
     public ResponseEntity<?> deleteVideo(@PathVariable Long videoId) {
         videoService.deleteVideo(videoId);

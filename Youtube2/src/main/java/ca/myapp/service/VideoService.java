@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 
 @Service
@@ -64,6 +66,20 @@ public class VideoService {
         } else {
             throw new RuntimeException("Video not found with id " + videoId); // Handle this exception appropriately
         }
+    }
+    public List<Video> getVideos(String seed, int page, int size) {
+        List<Video> videos = videoRepository.findAll(); // Fetch all videos (simplified for example)
+
+        // Shuffle videos based on the seed
+        long seedLong = Long.parseLong(seed); // Convert seed to long. Ensure this is safe and valid.
+        Collections.shuffle(videos, new Random(seedLong));
+
+        // Calculate pagination
+        int start = page * size;
+        int end = Math.min((page + 1) * size, videos.size());
+
+        if (start > videos.size()) start = videos.size();
+        return videos.subList(start, end); // Return a page of videos
     }
 
     @Transactional

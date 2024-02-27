@@ -29,7 +29,7 @@ public class CommentService {
     @Autowired
     private UserService userService;
 
-    public Comment createComment(Long userId,long videoId,String text) {
+    public Comment createComment(long videoId,String text) {
         User currentUser = userService.getAuthenticatedUser();
 
         Video video = videoRepository.findById(videoId)
@@ -45,7 +45,7 @@ public class CommentService {
     }
 
     public List<Comment> getComments(long videoId){
-        return commentRepository.findByVideoId(videoId);
+        return commentRepository.findByVideoIdOrderByCreatedAtDesc(videoId);
     }
 
     public void updateComment (Long commentId, String newComment){
