@@ -52,5 +52,5 @@ public class User {
         this.password = password;
     }
 
-    // You might also include other methods like equals, hashCode, and toString as needed
+
 }

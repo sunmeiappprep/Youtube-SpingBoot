@@ -15,7 +15,7 @@ public class VideoReaction {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private Boolean liked; // true for like, false for dislike
+    private Boolean liked;
 
     // Getters
     public Long getId() {

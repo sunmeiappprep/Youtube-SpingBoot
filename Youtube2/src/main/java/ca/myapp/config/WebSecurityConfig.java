@@ -39,6 +39,20 @@ public class WebSecurityConfig {
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        System.out.println("asdas");
+//        http
+//                .csrf(AbstractHttpConfigurer::disable)
+//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authorizeRequests(auth -> auth
+//                        .requestMatchers("/login", "/register","/api/register","/api/login").permitAll()
+//                        .anyRequest().authenticated())
+//                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+//
+//        return http.build();
+//    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         System.out.println("asdas");
@@ -46,13 +60,12 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeRequests(auth -> auth
-                        .requestMatchers("/login", "/register","/api/register","/api/login").permitAll()
+                        .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-
 
     // Expose AuthenticationManager as a Bean
     @Bean
