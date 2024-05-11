@@ -11,4 +11,8 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
 
     //returns a List of Video obj that belongs to the uploaderId
     List<Video> findByUploaderId(Long uploaderId);
+
+    List<Video> findByTitle(String title);
+
+    List<Video> findByTitleContainingIgnoreCase(String title);
 }

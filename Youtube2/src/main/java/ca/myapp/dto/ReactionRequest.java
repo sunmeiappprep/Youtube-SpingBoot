@@ -3,6 +3,8 @@ package ca.myapp.dto;
 public class ReactionRequest {
     private Long videoId;
     private Long userId; // Have to change to some Token based later
+
+    private Long commentId;
     private boolean liked;
 
 
@@ -30,12 +32,22 @@ public class ReactionRequest {
         this.liked = liked;
     }
 
+    public Long getCommentId() { // Getter for commentId
+        return commentId;
+    }
+
+    public void setCommentId(Long commentId) { // Setter for commentId
+        this.commentId = commentId;
+    }
+
+
     @Override
     public String toString() {
         return "ReactionRequest{" +
                 "userId=" + userId +
-                ", videoId='" + videoId + '\'' +
-                ", liked='" + liked + '\'' +
+                ", videoId=" + videoId +
+                ", commentId=" + commentId +
+                ", liked=" + liked +
                 '}';
     }
 }
