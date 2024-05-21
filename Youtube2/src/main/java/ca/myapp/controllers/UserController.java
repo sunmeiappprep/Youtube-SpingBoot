@@ -1,11 +1,11 @@
 package ca.myapp.controllers;
 import ca.myapp.models.User; // Import the User class
 import ca.myapp.models.Video;
-import ca.myapp.repository.UserRepository;
 import ca.myapp.service.UserService;
 import ca.myapp.service.VideoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -77,6 +77,28 @@ public class UserController {
             return ResponseEntity.noContent().build(); // Return 204
         }
         return ResponseEntity.ok(listOfVideo); // Return 200
+    }
+
+    @GetMapping("/{uploaderId}/username")
+    public ResponseEntity<String> getUserUsername(@PathVariable Long uploaderId) {
+        try {
+            String username = userService.getUserUsernameById(uploaderId);
+            System.out.println("username");
+            return ResponseEntity.ok(username);
+        } catch (UsernameNotFoundException e) {
+            System.out.println("usernameError");
+            return ResponseEntity.status(404).body(e.getMessage()); // Return 404 with error message
+        }
+    }
+
+    @GetMapping("/checkJWT")
+    public ResponseEntity<String> getAuthenticatedUser() {
+        User user = userService.getAuthenticatedUser();
+        if (user != null) {
+            return ResponseEntity.ok("AUTHORIZED");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 
 }

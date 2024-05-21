@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -37,6 +38,15 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), new ArrayList<>());
+    }
+
+    public String getUserUsernameById(Long uploaderId) throws UsernameNotFoundException {
+        Optional<User> user = userRepository.findById(uploaderId);
+        if (user.isPresent()) {
+            return user.get().getUsername();
+        } else {
+            throw new UsernameNotFoundException("User not found with id: " + uploaderId);
+        }
     }
 
     public User authenticate(String username, String password) {

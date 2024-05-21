@@ -1,8 +1,7 @@
 package ca.myapp.utility;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import ca.myapp.exception.TokenExpiredException;
+import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;
 import java.util.Base64;
 import java.util.Date;
@@ -53,8 +52,15 @@ public class JwtUtil {
 
 
     public Boolean validateToken(String token, String username) {
-        final String usernameInToken = getUsernameFromToken(token);
-        return (usernameInToken.equals(username) && !isTokenExpired(token));
+        try {
+            final String usernameInToken = getUsernameFromToken(token);
+            return (usernameInToken.equals(username) && !isTokenExpired(token));
+        } catch (ExpiredJwtException e) {
+            throw new TokenExpiredException("Token has expired");
+        } catch (JwtException | IllegalArgumentException e) {
+            // Handle other JWT exceptions
+            throw new RuntimeException("Token validation failed");
+        }
     }
 
     public String getUsernameFromToken(String token) {

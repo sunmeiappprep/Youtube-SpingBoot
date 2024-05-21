@@ -28,6 +28,14 @@ public class PlaylistVideoService {
         this.videoRepository = videoRepository;
     }
 
+    public boolean existsByPlaylistIdAndVideoId(Long playlistId, Long videoId) {
+        return playlistVideoRepository.existsByPlaylistTitleIdAndVideoId(playlistId, videoId);
+    }
+
+    public List<PlaylistTitle> checkIfVideoIsInPlaylists(Long userId, Long videoId) {
+        return playlistVideoRepository.findPlaylistsByUserAndVideo(userId,videoId);
+    }
+
     @Transactional
     public PlaylistVideo addVideoToPlaylist(Long playlistTitleId, Long videoId) throws Exception {
 

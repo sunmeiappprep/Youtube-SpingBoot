@@ -1,8 +1,11 @@
 package ca.myapp.controllers;
 import ca.myapp.dto.AddVideoToPlaylistRequest;
+import ca.myapp.models.PlaylistTitle;
 import ca.myapp.models.PlaylistVideo;
+import ca.myapp.models.User;
 import ca.myapp.models.Video;
 import ca.myapp.service.PlaylistVideoService;
+import ca.myapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,9 @@ import java.util.List;
 @RequestMapping("/api/playlistVideos")
 public class PlaylistVideoController {
 
+
+    @Autowired
+    private UserService userService;
     private final PlaylistVideoService playlistVideoService;
 
     @Autowired
@@ -25,11 +31,27 @@ public class PlaylistVideoController {
     }
 
     @PostMapping("/addVideoToPlaylist")
-    public ResponseEntity<PlaylistVideo> addVideoToPlaylist(@RequestBody AddVideoToPlaylistRequest request) throws Exception {
-            System.out.println(request);
-            PlaylistVideo playlistVideo = playlistVideoService.addVideoToPlaylist(request.getPlaylistTitleId(), request.getVideoId());
+    public ResponseEntity<?> addVideoToPlaylist(@RequestBody AddVideoToPlaylistRequest request) throws Exception {
+        Long playlistId = request.getPlaylistTitleId();
+        Long videoId = request.getVideoId();
+
+        if (playlistVideoService.existsByPlaylistIdAndVideoId(playlistId, videoId)) {
+            playlistVideoService.deleteVideoFromPlaylist(playlistId, videoId);
+            return ResponseEntity.ok().body("PlaylistVideo relationship deleted successfully.");
+        } else {
+            PlaylistVideo playlistVideo = playlistVideoService.addVideoToPlaylist(playlistId, videoId);
             return new ResponseEntity<>(playlistVideo, HttpStatus.CREATED);
+        }
     }
+
+    @GetMapping("/checkVideo")
+    public ResponseEntity<List<PlaylistTitle>> checkIfVideoIsInPlaylists(@RequestParam Long videoId) {
+        User currentUser = userService.getAuthenticatedUser(); // Get the authenticated user
+        System.out.println(currentUser.getId()+"User ID");
+        List<PlaylistTitle> playlists = playlistVideoService.checkIfVideoIsInPlaylists(currentUser.getId(), videoId);
+        return ResponseEntity.ok(playlists);
+    }
+
 
     @GetMapping("/{playlistTitleId}")
     public ResponseEntity<List<Video>> getVideosByPlaylistTitleId(@PathVariable Long playlistTitleId) {
