@@ -38,6 +38,14 @@ public class PlaylistTitleController {
         return new ResponseEntity<>(playlistTitle, HttpStatus.CREATED);
     }
 
+
+    @GetMapping("/title/{playlistTitleId}")
+    public ResponseEntity<PlaylistTitle> getPlaylistTitle(@PathVariable Long playlistTitleId) {
+        System.out.println("title");
+        PlaylistTitle playlistTitle = playlistTitleService.getPlaylistTitle(playlistTitleId);
+        return ResponseEntity.ok(playlistTitle);
+    }
+
     @GetMapping("/{userId}")
     public ResponseEntity<List<PlaylistTitleDTO>> getUserPlaylists(@PathVariable Long userId) {
         List<PlaylistTitleDTO> playlists = playlistTitleService.getUserPlaylists(userId);

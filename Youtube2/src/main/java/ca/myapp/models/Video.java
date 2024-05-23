@@ -1,4 +1,5 @@
 package ca.myapp.models;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -29,10 +30,12 @@ public class Video {
     @Column(name = "generated_date", nullable = true)
     private LocalDate generatedDate;
 
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
     private User uploader;
+
+    // Getters and Setters
 
     public Long getId() {
         return id;
@@ -46,12 +49,12 @@ public class Video {
         return title;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getUrl() {
+        return url;
     }
 
     public void setUrl(String url) {
@@ -62,24 +65,16 @@ public class Video {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Long getView() {
         return view;
     }
 
     public void setView(Long view) {
         this.view = view;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setUploader(User uploader) {
-        this.uploader = uploader;
-    }
-
-    public Long getUserId() {
-        return uploader != null ? uploader.getId() : null;
     }
 
     public LocalDate getGeneratedDate() {
@@ -90,17 +85,13 @@ public class Video {
         this.generatedDate = generatedDate;
     }
 
-
-    public Video() {
-        // Generate a random number of views each time a Video object is created
-        // For example, generating a random number between 0 and 10000
-        this.view = ThreadLocalRandom.current().nextLong(0, 10001);
-        long minDay = LocalDate.now().minusYears(2).toEpochDay();
-        long maxDay = LocalDate.now().minusDays(1).toEpochDay();
-        long randomDay = ThreadLocalRandom.current().nextLong(minDay, maxDay);
-        this.generatedDate = LocalDate.ofEpochDay(randomDay);
+    public User getUploader() {
+        return uploader;
     }
 
+    public void setUploader(User uploader) {
+        this.uploader = uploader;
+    }
 
     @Override
     public String toString() {
@@ -110,7 +101,6 @@ public class Video {
                 ", url='" + url + '\'' +
                 ", view='" + view + '\'' +
                 ", description='" + description + '\'' +
-
                 '}';
     }
 

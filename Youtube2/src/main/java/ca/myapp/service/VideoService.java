@@ -25,7 +25,6 @@ public class VideoService {
         this.userService = userService;
     }
     public Video findById(Long id) throws Exception {
-        //return a video obj
         return videoRepository.findById(id)
                 .orElseThrow(() -> new Exception("There is no video with that id"));
     }

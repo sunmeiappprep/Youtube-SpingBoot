@@ -44,6 +44,11 @@ public class PlaylistTitleService {
                 .collect(Collectors.toList());
     }
 
+    public PlaylistTitle getPlaylistTitle(Long playlistTitleId) {
+        return playlistTitleRepository.findById(playlistTitleId)
+                .orElseThrow(() -> new RuntimeException("PlaylistTitle not found with id " + playlistTitleId));
+    }
+
 //    public List<Object[]> getPlaylistTitlesAndVideosByUser(User user) {
 //        return playlistTitleRepository.findPlaylistTitlesAndVideoTitlesByUser(user);
 //    }

@@ -1,8 +1,10 @@
 package ca.myapp.service;
 
+import ca.myapp.dto.VideoWithUserDTO;
 import ca.myapp.exception.ErrorToFrontEnd;
 import ca.myapp.models.PlaylistTitle;
 import ca.myapp.models.PlaylistVideo;
+import ca.myapp.models.User;
 import ca.myapp.models.Video;
 import ca.myapp.repository.PlaylistTitleRepository;
 import ca.myapp.repository.PlaylistVideoRepository;
@@ -64,13 +66,14 @@ public class PlaylistVideoService {
     }
 
     @Transactional
-    public List<Video> getVideosByPlaylistTitleId(Long playlistTitleId) {
-        //find all the playlist titles
+    public List<VideoWithUserDTO> findVideosWithUserByPlaylistTitleId(Long playlistTitleId) {
         List<PlaylistVideo> playlistVideos = playlistVideoRepository.findByPlaylistTitleId(playlistTitleId);
-        // have to look into these method later
-        return playlistVideos.stream()
-                .map(PlaylistVideo::getVideo)
-                .collect(Collectors.toList());
+
+        return playlistVideos.stream().map(playlistVideo -> {
+            Video video = playlistVideo.getVideo();
+            User uploader = video.getUploader();
+            return new VideoWithUserDTO(video, uploader);
+        }).collect(Collectors.toList());
     }
 
     @Transactional

@@ -1,5 +1,9 @@
 package ca.myapp.controllers;
 import ca.myapp.dto.VideoRequestDto;
+import ca.myapp.dto.VideoWithUserDTO;
+import ca.myapp.models.User;
+import ca.myapp.repository.UserRepository;
+import ca.myapp.service.UserService;
 import ca.myapp.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -20,21 +25,26 @@ public class VideoController {
     private final VideoService videoService;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
     public VideoController(VideoService videoService) {
         this.videoService = videoService;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getVideoById(@PathVariable("id") Long id) throws Exception {
-        // Use the videoService to get the video by id
         Video video = videoService.findById(id);
         if (video != null) {
-            return ResponseEntity.ok(video);
+            VideoWithUserDTO videoWithUserDTO = new VideoWithUserDTO(video, video.getUploader());
+            return ResponseEntity.ok(videoWithUserDTO);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
-
 
     @PostMapping("/")
     public ResponseEntity<Video> createVideo(@RequestBody VideoRequestDto videoRequestDto) {
@@ -51,11 +61,18 @@ public class VideoController {
     }
 
     @GetMapping("/videos")
-    public ResponseEntity<List<Video>> getVideos(@RequestParam String seed, @RequestParam int page) {
+    public ResponseEntity<List<VideoWithUserDTO>> getVideos(@RequestParam String seed, @RequestParam int page) {
         // Use the seed and page to fetch videos in a consistent pseudo-random order
-        List<Video> videos = videoService.getVideos(seed, page,40);
-        return ResponseEntity.ok(videos);
+        List<Video> videos = videoService.getVideos(seed, page, 40);
+
+        // Map videos to VideoWithUserDTO
+        List<VideoWithUserDTO> videoWithUserDTOs = videos.stream()
+                .map(video -> new VideoWithUserDTO(video, video.getUploader()))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(videoWithUserDTOs);
     }
+
 
 
 

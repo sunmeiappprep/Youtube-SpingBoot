@@ -61,6 +61,10 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId).orElse(null);
+    }
+
     public User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName(); // Assuming the username is the principal

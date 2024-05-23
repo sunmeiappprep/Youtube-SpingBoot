@@ -1,5 +1,6 @@
 package ca.myapp.controllers;
 import ca.myapp.dto.AddVideoToPlaylistRequest;
+import ca.myapp.dto.VideoWithUserDTO;
 import ca.myapp.models.PlaylistTitle;
 import ca.myapp.models.PlaylistVideo;
 import ca.myapp.models.User;
@@ -54,16 +55,9 @@ public class PlaylistVideoController {
 
 
     @GetMapping("/{playlistTitleId}")
-    public ResponseEntity<List<Video>> getVideosByPlaylistTitleId(@PathVariable Long playlistTitleId) {
-        try {
-            List<Video> videos = playlistVideoService.getVideosByPlaylistTitleId(playlistTitleId);
-            if (videos.isEmpty()) {
-                return ResponseEntity.noContent().build();
-            }
-            return ResponseEntity.ok(videos);
-        } catch (Exception e) {
-            return ResponseEntity.ok(null);
-        }
+    public List<VideoWithUserDTO> getVideosWithUserByPlaylistTitleId(@PathVariable("playlistTitleId") Long playlistTitleId) {
+        System.out.println("testing");
+        return playlistVideoService.findVideosWithUserByPlaylistTitleId(playlistTitleId);
     }
 
     @DeleteMapping("/delete/{playlistTitleId}/{videoId}")

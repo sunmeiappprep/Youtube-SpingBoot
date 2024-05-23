@@ -1,7 +1,12 @@
 package ca.myapp.models;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -16,6 +21,10 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @OneToMany(mappedBy = "uploader", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Video> videos = new HashSet<>();
+
     @Override
     public String toString() {
         return "User{" +
@@ -23,6 +32,7 @@ public class User {
                 ", username='" + username + '\'' +
                 '}';
     }
+
     // Default constructor
     public User() {
     }
@@ -52,5 +62,12 @@ public class User {
         this.password = password;
     }
 
+    public Set<Video> getVideos() {
+        return videos;
+    }
+
+    public void setVideos(Set<Video> videos) {
+        this.videos = videos;
+    }
 
 }
