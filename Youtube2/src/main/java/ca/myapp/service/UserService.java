@@ -12,7 +12,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -69,6 +71,12 @@ public class UserService implements UserDetailsService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName(); // Assuming the username is the principal
         return userRepository.findByUsername(username);
+    }
+
+    public User getRandomUser() {
+        List<User> users = userRepository.findAll();
+        int randomIndex = ThreadLocalRandom.current().nextInt(users.size());
+        return users.get(randomIndex);
     }
 
 }

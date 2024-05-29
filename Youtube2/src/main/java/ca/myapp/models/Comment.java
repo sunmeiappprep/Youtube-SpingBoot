@@ -1,6 +1,9 @@
 package ca.myapp.models;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "comments")
@@ -22,6 +25,17 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "video_id", nullable = false)
     private Video video;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    @JsonIgnore
+    private Comment parent;
+
+//    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Comment> replies;
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> replies = new ArrayList<>();
 
     // Constructors
     public Comment() {
@@ -52,7 +66,6 @@ public class Comment {
         this.createdAt = createdAt;
     }
 
-
     public User getUser() {
         return user;
     }
@@ -69,12 +82,31 @@ public class Comment {
         this.video = video;
     }
 
+    public Comment getParent() {
+        return parent;
+    }
+
+    public void setParent(Comment parent) {
+        this.parent = parent;
+    }
+
+    public List<Comment> getReplies() {
+        return replies;
+    }
+
+    public void setReplies(List<Comment> replies) {
+        this.replies = replies;
+    }
+
     @Override
     public String toString() {
-        return "CommentDto{" +
-                "userId=" + user +
-                ", videoId='" + video + '\'' +
-                ", liked='" + text + '\'' +
+        return "Comment{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", createdAt=" + createdAt +
+                ", user=" + user +
+                ", video=" + video +
+                ", parent=" + parent +
                 '}';
     }
 

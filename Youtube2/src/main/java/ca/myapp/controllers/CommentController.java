@@ -34,15 +34,15 @@ public class CommentController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<?> addComment (@RequestBody CommentDto request) {
-            Comment comment = commentService.createComment(request.getVideoId(),request.getText());
-            return ResponseEntity.ok(comment);
+    public ResponseEntity<?> addComment(@RequestBody CommentDto request) {
+        Comment comment = commentService.createComment(request);
+        return ResponseEntity.ok(comment);
     }
 
+
     @GetMapping("/get/video/{videoId}")
-    public ResponseEntity<?> getComments (@PathVariable("videoId") Long videoId) {
-        List<Comment> listOfComment = commentService.getComments(videoId);
-        return ResponseEntity.ok(listOfComment);
+    public List<CommentDto> getComments (@PathVariable("videoId") Long videoId) {
+        return commentService.getCommentsByVideoId(videoId);
     }
 
 
@@ -58,6 +58,11 @@ public class CommentController {
         System.out.println(request.getText());
         commentService.updateComment(commentId, request.getText());
         return ResponseEntity.ok("Successful Updated Comment");
+    }
+
+    @DeleteMapping("/deleteAll")
+    public void deleteAllComments() {
+        commentService.deleteAllComments();
     }
 
 }

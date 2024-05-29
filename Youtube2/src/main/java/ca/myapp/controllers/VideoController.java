@@ -73,7 +73,10 @@ public class VideoController {
         return ResponseEntity.ok(videoWithUserDTOs);
     }
 
-
+    @GetMapping("/subscribed")
+    public List<Video> getSubscribedVideos(@RequestParam Long subscriberId) {
+        return videoService.getSubscribedVideos(subscriberId);
+    }
 
 
     @DeleteMapping("/{videoId}")

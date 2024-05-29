@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,6 +25,12 @@ public class User {
     @OneToMany(mappedBy = "uploader", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Video> videos = new HashSet<>();
+
+    @OneToMany(mappedBy = "subscriber")
+    private List<Subscription> subscriptions;
+
+    @OneToMany(mappedBy = "channel")
+    private List<Subscription> subscribers;
 
     @Override
     public String toString() {

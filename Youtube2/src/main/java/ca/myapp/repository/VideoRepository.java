@@ -1,6 +1,8 @@
 package ca.myapp.repository;
 import ca.myapp.models.Video;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,4 +17,7 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
     List<Video> findByTitle(String title);
 
     List<Video> findByTitleContainingIgnoreCase(String title);
+
+    @Query("SELECT v FROM Video v WHERE v.uploader.id IN :uploaderIds")
+    List<Video> findByUploaderIds(@Param("uploaderIds") List<Long> uploaderIds);
 }
