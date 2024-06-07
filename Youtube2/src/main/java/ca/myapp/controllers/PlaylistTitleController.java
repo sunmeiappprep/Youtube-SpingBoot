@@ -66,11 +66,12 @@ public class PlaylistTitleController {
 
     @GetMapping("/user/{userId}/firstVideos")
     public ResponseEntity<List<PlaylistTitleAndVideoDTO>> getFirstVideosByUser(@PathVariable Long userId) {
-        User authenticatedUser = userService.getAuthenticatedUser();
-        if (authenticatedUser == null || !authenticatedUser.getId().equals(userId)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-        List<PlaylistTitleAndVideoDTO> results = playlistTitleService.getPlaylistTitlesAndVideosByUser(authenticatedUser);
+//        User authenticatedUser = userService.getAuthenticatedUser();
+//        if (authenticatedUser == null || !authenticatedUser.getId().equals(userId)) {
+//            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+//        }
+        User user = userService.getUserById(userId);
+        List<PlaylistTitleAndVideoDTO> results = playlistTitleService.getPlaylistTitlesAndVideosByUser(user);
         return ResponseEntity.ok(results);
     }
 }

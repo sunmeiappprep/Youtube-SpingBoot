@@ -3,6 +3,7 @@ import ca.myapp.models.User; // Import the User class
 import ca.myapp.models.Video;
 import ca.myapp.service.UserService;
 import ca.myapp.service.VideoService;
+import ca.myapp.utility.JwtUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,6 +26,9 @@ public class UserController {
 
     @Autowired
     private final VideoService videoService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Autowired
     public UserController(VideoService videoService) {
@@ -91,13 +95,35 @@ public class UserController {
         }
     }
 
+//    @GetMapping("/checkJWT")
+//    public ResponseEntity<String> getAuthenticatedUser() {
+//
+//        User user = userService.getAuthenticatedUser();
+//        if (user != null) {
+//            return ResponseEntity.ok("AUTHORIZED");
+//        } else {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        }
+//    }
+
     @GetMapping("/checkJWT")
-    public ResponseEntity<String> getAuthenticatedUser() {
-        User user = userService.getAuthenticatedUser();
-        if (user != null) {
-            return ResponseEntity.ok("AUTHORIZED");
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    public ResponseEntity<Boolean> checkJWT(@RequestHeader("Authorization") String token) {
+        try {
+            // remove the bearer string
+            String jwtToken = token.substring(7);
+
+            if (jwtUtil.isTokenExpired(jwtToken)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+            }
+
+            User user = userService.getAuthenticatedUser();
+            if (user != null) {
+                return ResponseEntity.ok(true);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
         }
     }
 

@@ -2,14 +2,19 @@ package ca.myapp.dto;
 
 import ca.myapp.models.User;
 import ca.myapp.models.Video;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CommentDto {
-    private Long id;  // Add ID field
+    private Long id;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long videoId;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long userId; // Can be replaced with token-based user identification later
     private String text;
     private Long parentId; // Field for parent comment ID

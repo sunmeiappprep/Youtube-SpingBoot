@@ -2,7 +2,9 @@ package ca.myapp.controllers;
 
 
 import ca.myapp.dto.CommentDto;
+import ca.myapp.dto.CommentReactionDTO;
 import ca.myapp.models.Comment;
+import ca.myapp.models.CommentReaction;
 import ca.myapp.models.User;
 import ca.myapp.repository.CommentRepository;
 import ca.myapp.service.CommentService;
@@ -63,6 +65,11 @@ public class CommentController {
     @DeleteMapping("/deleteAll")
     public void deleteAllComments() {
         commentService.deleteAllComments();
+    }
+
+    @GetMapping("/videos/{videoId}/comments/reactions")
+    public List<CommentReactionDTO> getCommentReactionsByVideoId(@PathVariable Long videoId) {
+        return commentService.getCommentReactionsByVideoId(videoId);
     }
 
 }

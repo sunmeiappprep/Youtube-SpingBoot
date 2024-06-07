@@ -1,11 +1,14 @@
 package ca.myapp.service;
 
 import ca.myapp.dto.CommentDto;
+import ca.myapp.dto.CommentReactionDTO;
 import ca.myapp.exception.ErrorToFrontEnd;
 import ca.myapp.exception.idNotFoundException;
 import ca.myapp.models.Comment;
+import ca.myapp.models.CommentReaction;
 import ca.myapp.models.User;
 import ca.myapp.models.Video;
+import ca.myapp.repository.CommentReactionRepository;
 import ca.myapp.repository.CommentRepository;
 import ca.myapp.repository.UserRepository;
 import ca.myapp.repository.VideoRepository;
@@ -15,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+
 @Service
 public class CommentService {
 
@@ -32,6 +37,12 @@ public class CommentService {
 
     @Autowired
     private VideoService videoService;
+
+    @Autowired
+    private CommentReactionRepository commentReactionRepository;
+
+    @Autowired
+    private CommentReactionService commentReactionService;
 
     public Comment createComment(CommentDto request) {
         //seeding
@@ -152,6 +163,36 @@ public class CommentService {
     @Transactional
     public void deleteAllComments() {
         commentRepository.deleteAllComments();
+    }
+
+    public List<CommentReactionDTO> getCommentReactionsByVideoId(Long videoId) {
+
+        List<Comment> comments = commentRepository.findByVideoId(videoId);
+        System.out.println("Comments retrieved: " + comments);
+
+
+        List<Long> commentIds = comments.stream().map(Comment::getId).collect(Collectors.toList());
+        System.out.println("Comment IDs: " + commentIds);
+
+
+        List<CommentReactionDTO> commentReactions = new ArrayList<>();
+
+        for (Long id : commentIds) {
+            try {
+                int liked = commentReactionService.countLikes(id);
+                int disliked = commentReactionService.countDislikes(id);
+                int diff = liked - disliked;
+
+
+                CommentReactionDTO reactionDTO = new CommentReactionDTO(id, liked, disliked, diff);
+                commentReactions.add(reactionDTO);
+
+            } catch (Exception e) {
+                System.err.println("Error in getting comment Like or Dislike for comment ID: " + id);
+            }
+        }
+
+        return commentReactions;
     }
 
 }
