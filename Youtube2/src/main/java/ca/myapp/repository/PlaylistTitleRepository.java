@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PlaylistTitleRepository extends JpaRepository<PlaylistTitle, Long> {
     List<PlaylistTitle> findByCreatedBy_Id(Long userId);
@@ -26,4 +27,8 @@ public interface PlaylistTitleRepository extends JpaRepository<PlaylistTitle, Lo
             "WHERE pt.createdBy = :user")
     List<Object[]> findPlaylistTitlesAndVideosByUser(@Param("user") User user);
 
+
+    boolean existsByCreatedBy_IdAndTitle(Long userId, String title);
+
+    Optional<PlaylistTitle> findByCreatedBy_IdAndTitle(Long userId, String title);
 }

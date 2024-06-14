@@ -1,5 +1,6 @@
 package ca.myapp.controllers;
 
+import ca.myapp.service.PlaylistTitleService;
 import ca.myapp.utility.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -35,6 +36,9 @@ public class MainController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private PlaylistTitleService playlistTitleService;
 
     @GetMapping("/login")
     public String login() {
@@ -93,10 +97,24 @@ public class MainController {
             System.out.println(authenticatedUser.getUsername());
             final String jwtToken = jwtUtil.generateToken(authenticatedUser.getUsername());
             LoginResponse response = new LoginResponse(authenticatedUser, jwtToken);
+            System.out.println(authenticatedUser.getId());
+            ensureUserPlaylists(authenticatedUser.getId());
             return ResponseEntity.ok(response); // Return both User and JWT token
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Username or Password is incorrect", e);
         }
+    }
+
+    private void ensureUserPlaylists(Long userId) {
+        if (!playlistTitleService.playlistTitleExistsByName(userId, "Watch Later")) {
+            System.out.println("Watch Later");
+            playlistTitleService.autoCreate(userId,"Watch Later");
+        }
+        if (!playlistTitleService.playlistTitleExistsByName(userId, "Liked Video")) {
+            System.out.println("Liked Video");
+            playlistTitleService.autoCreate(userId,"Liked Video");
+        }
+        System.out.println("ensureUserPlaylists ran");
     }
 
     @GetMapping("/testing")

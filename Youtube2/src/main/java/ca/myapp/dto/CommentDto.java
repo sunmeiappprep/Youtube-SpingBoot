@@ -20,12 +20,22 @@ public class CommentDto {
     private Long parentId; // Field for parent comment ID
     private LocalDateTime createdAt;  // Add createdAt field
     private User user;  // Add UserDto field
+
+    private String username;
     private Video video;  // Add VideoDto field
     private List<CommentDto> replies = new ArrayList<>();  // Add replies field
 
     // Getters and setters
     public Long getId() {
         return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setId(Long id) {
@@ -108,6 +118,7 @@ public class CommentDto {
                 ", user=" + user +
                 ", video=" + video +
                 ", replies=" + replies +
+                ", username='" + username + '\'' +
                 '}';
     }
 }

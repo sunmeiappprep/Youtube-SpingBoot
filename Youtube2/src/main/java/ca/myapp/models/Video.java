@@ -18,8 +18,12 @@ public class Video {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = true)
+    @Column(nullable = true, length = 2000)
     private String description;
+
+    // Temporary column to force schema update
+    @Column(nullable = true)
+    private String descriptionTemp;
 
     @Column(nullable = true)
     private Long view;

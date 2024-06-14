@@ -47,7 +47,7 @@ public class VideoController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Video> createVideo(@RequestBody VideoRequestDto videoRequestDto) {
+    public ResponseEntity<Video> createVideo(@RequestBody VideoRequestDto videoRequestDto) throws Exception {
         logger.info("Received video creation request: {}", videoRequestDto.toString());
 
         Video video = videoService.createVideo(videoRequestDto);

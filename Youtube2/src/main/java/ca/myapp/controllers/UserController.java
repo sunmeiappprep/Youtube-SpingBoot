@@ -1,6 +1,7 @@
 package ca.myapp.controllers;
 import ca.myapp.models.User; // Import the User class
 import ca.myapp.models.Video;
+import ca.myapp.service.PlaylistTitleService;
 import ca.myapp.service.UserService;
 import ca.myapp.service.VideoService;
 import ca.myapp.utility.JwtUtil;
@@ -31,6 +32,9 @@ public class UserController {
     private JwtUtil jwtUtil;
 
     @Autowired
+    private PlaylistTitleService playlistTitleService;
+
+    @Autowired
     public UserController(VideoService videoService) {
         this.videoService = videoService;
     }
@@ -47,17 +51,32 @@ public class UserController {
         }
     }
 
+
+
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody User loginUser) {
         try {
             User authenticatedUser = userService.authenticate(loginUser.getUsername(), loginUser.getPassword());
             System.out.println("Login Success");
+//            ensureUserPlaylists(authenticatedUser);
             return ResponseEntity.ok(authenticatedUser);
         } catch (Exception e) {
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED, "Username or Password is incorrect", e);
         }
     }
+
+//    private void ensureUserPlaylists(User user) {
+//        if (!playlistTitleService.playlistTitleExistsByName(user, "Watch Later")) {
+//            System.out.println("Watch Later");
+//            playlistTitleService.createPlaylist("Watch Later");
+//        }
+//        if (!playlistTitleService.playlistTitleExistsByName(user, "Liked Video")) {
+//            System.out.println("Liked Video");
+//            playlistTitleService.createPlaylist("Liked Video");
+//        }
+//        System.out.println("ensureUserPlaylists ran");
+//    }
 
     @GetMapping("/testing")
     public String testingEndpoint(Authentication authentication) {

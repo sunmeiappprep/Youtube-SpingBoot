@@ -36,7 +36,7 @@ public class CommentController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<?> addComment(@RequestBody CommentDto request) {
+    public ResponseEntity<?> addComment(@RequestBody CommentDto request) throws Exception {
         Comment comment = commentService.createComment(request);
         return ResponseEntity.ok(comment);
     }

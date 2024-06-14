@@ -2,7 +2,6 @@ package ca.myapp.service;
 
 import ca.myapp.dto.PlaylistTitleAndVideoDTO;
 import ca.myapp.dto.PlaylistTitleDTO;
-import ca.myapp.exception.idNotFoundException;
 import ca.myapp.models.PlaylistTitle;
 import ca.myapp.models.User;
 import ca.myapp.models.Video;
@@ -82,6 +81,8 @@ public class PlaylistTitleService {
         // Convert the map to a list of PlaylistTitleAndVideoDTO
         return new ArrayList<>(playlistMap.values());
     }
+
+
     public PlaylistTitle createPlaylist(String playlistName){
         User currentUser = userService.getAuthenticatedUser();
         System.out.println(playlistName);
@@ -90,5 +91,26 @@ public class PlaylistTitleService {
         playlistTitle.setIsPrivate(false);
         playlistTitle.setCreatedBy(currentUser);
         return playlistTitleRepository.save(playlistTitle);
+    }
+
+    public void autoCreate(Long UserId, String playlistName){
+        System.out.println(playlistName);
+        PlaylistTitle playlistTitle = new PlaylistTitle();
+        playlistTitle.setTitle(playlistName);
+        playlistTitle.setIsPrivate(false);
+        User currentUser = userService.getUserById(UserId);
+        playlistTitle.setCreatedBy(currentUser);
+        playlistTitleRepository.save(playlistTitle);
+    }
+
+    public boolean playlistTitleExistsByName(Long userId, String playlistName) {
+        return playlistTitleRepository.existsByCreatedBy_IdAndTitle(userId, playlistName);
+    }
+
+
+    public Long findPlaylistIdByUserAndTitle(Long userId, String title) {
+        PlaylistTitle playlist = playlistTitleRepository.findByCreatedBy_IdAndTitle(userId, title)
+                .orElseThrow(() -> new IllegalArgumentException("Playlist not found"));
+        return playlist.getId();
     }
 }

@@ -37,12 +37,12 @@ public class VideoService {
                 .orElseThrow(() -> new Exception("There is no video with that id"));
     }
 
-    public Video createVideo(VideoRequestDto request) {
+    public Video createVideo(VideoRequestDto request) throws Exception {
         // Use the DTO to break down the incoming body and you can use override toString.
         // Passed the user id to userRep to find the user obj and map that to the uploader
         // User currentUser = userService.getAuthenticatedUser();
-        User currentUser = userService.getRandomUser();
-        System.out.println(currentUser);
+        System.out.println(request.getUsername());
+        User currentUser = userService.findUserByUsername(request.getUsername());
 
         // Create a Video obj name video and set the params
         Video video = new Video();

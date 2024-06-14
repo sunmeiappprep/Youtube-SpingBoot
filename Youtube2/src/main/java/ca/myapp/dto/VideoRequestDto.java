@@ -9,6 +9,7 @@ public class VideoRequestDto {
     private Long userId;
     private String title;
     private String url;
+    private String username;
     private String description;
     private Long view;
 
@@ -25,7 +26,13 @@ public class VideoRequestDto {
         return generatedDate;
     }
 
+    public String getUsername() {
+        return username;
+    }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public void setUserId(Long userId) {
         this.userId = userId;
@@ -68,9 +75,12 @@ public class VideoRequestDto {
     public String toString() {
         return "VideoRequestDto{" +
                 "userId=" + userId +
+                ", username='" + username + '\'' +
                 ", title='" + title + '\'' +
                 ", url='" + url + '\'' +
                 ", description='" + description + '\'' +
+                ", view=" + view +
+                ", generatedDate=" + generatedDate +
                 '}';
     }
 }

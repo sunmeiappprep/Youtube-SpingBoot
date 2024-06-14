@@ -52,17 +52,6 @@ public class PlaylistTitleController {
         return ResponseEntity.ok(playlists); // Return 200 with the list of playlists
     }
 
-//    @GetMapping("/user/{userId}/firstVideos")
-//    public List<Object[]> getFirstVideosByUser(@PathVariable Long userId) {
-//        User user = userService.getAuthenticatedUser(); // Retrieve the User by ID
-//        System.out.println("user");
-//        System.out.println(user);
-//        if (user == null) {
-//            // Handle user not found scenario, maybe return an appropriate response
-//            return null;
-//        }
-//        return playlistTitleService.getPlaylistTitlesAndVideosByUser(user);
-//    }
 
     @GetMapping("/user/{userId}/firstVideos")
     public ResponseEntity<List<PlaylistTitleAndVideoDTO>> getFirstVideosByUser(@PathVariable Long userId) {
@@ -73,5 +62,12 @@ public class PlaylistTitleController {
         User user = userService.getUserById(userId);
         List<PlaylistTitleAndVideoDTO> results = playlistTitleService.getPlaylistTitlesAndVideosByUser(user);
         return ResponseEntity.ok(results);
+    }
+
+    @GetMapping("/findIdByTitle")
+    public ResponseEntity<Long> findPlaylistIdByUserAndTitle(@RequestParam String title) {
+        User currentUser = userService.getAuthenticatedUser();
+        Long playlistId = playlistTitleService.findPlaylistIdByUserAndTitle(currentUser.getId(), title);
+        return ResponseEntity.ok(playlistId);
     }
 }
