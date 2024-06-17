@@ -40,9 +40,8 @@ public class VideoService {
     public Video createVideo(VideoRequestDto request) throws Exception {
         // Use the DTO to break down the incoming body and you can use override toString.
         // Passed the user id to userRep to find the user obj and map that to the uploader
-        // User currentUser = userService.getAuthenticatedUser();
-        System.out.println(request.getUsername());
-        User currentUser = userService.findUserByUsername(request.getUsername());
+        User currentUser = userService.getAuthenticatedUser();
+//        User currentUser = userService.findUserByUsername(request.getUsername());
 
         // Create a Video obj name video and set the params
         Video video = new Video();
@@ -50,10 +49,9 @@ public class VideoService {
         video.setUrl(request.getUrl());
         video.setDescription(request.getDescription());
         video.setUploader(currentUser);
-
-        Random random = new Random();
-        long randomViews = 1000L + (long)(random.nextDouble() * (999999L - 1000L));
-        video.setView(randomViews);
+//        Random random = new Random();
+//        long randomViews = 1000L + (long)(random.nextDouble() * (999999L - 1000L));
+        video.setView(request.getView());
         // Generate a random date within the past 8 years
         LocalDate now = LocalDate.now();
         LocalDate startDate = now.minusYears(8);
@@ -66,6 +64,36 @@ public class VideoService {
 
         return videoRepository.save(video);
     }
+
+    public Video seedVideo(VideoRequestDto request) throws Exception {
+        // Use the DTO to break down the incoming body and you can use override toString.
+        // Passed the user id to userRep to find the user obj and map that to the uploader
+        // User currentUser = userService.getAuthenticatedUser();
+        User currentUser = userService.findUserByUsername(request.getUsername());
+
+        // Create a Video obj name video and set the params
+        Video video = new Video();
+        video.setTitle(request.getTitle());
+        video.setUrl(request.getUrl());
+        video.setDescription(request.getDescription());
+        video.setUploader(currentUser);
+
+//        Random random = new Random();
+//        long randomViews = 1000L + (long)(random.nextDouble() * (999999L - 1000L));
+        video.setView(request.getView());
+        // Generate a random date within the past 8 years
+        LocalDate now = LocalDate.now();
+        LocalDate startDate = now.minusYears(8);
+        long daysBetween = ChronoUnit.DAYS.between(startDate, now);
+        LocalDate randomDate = startDate.plusDays(new Random().nextInt((int) daysBetween + 1));
+
+        video.setGeneratedDate(randomDate);
+
+
+
+        return videoRepository.save(video);
+    }
+
 
     public List<Video> getVideosByUploaderId(Long uploader) {
         return videoRepository.findByUploaderId(uploader);

@@ -54,6 +54,14 @@ public class VideoController {
         return new ResponseEntity<>(video, HttpStatus.CREATED);
     }
 
+    @PostMapping("/seed")
+    public ResponseEntity<Video> seedVideo(@RequestBody VideoRequestDto videoRequestDto) throws Exception {
+        logger.info("Received video creation request: {}", videoRequestDto.toString());
+
+        Video video = videoService.seedVideo(videoRequestDto);
+        return new ResponseEntity<>(video, HttpStatus.CREATED);
+    }
+
     @PutMapping("/{videoId}")
     public ResponseEntity<Video> updateVideo(@PathVariable Long videoId, @RequestBody Video videoDetails) {
         Video updatedVideo = videoService.updateVideo(videoId, videoDetails);

@@ -41,6 +41,13 @@ public class CommentController {
         return ResponseEntity.ok(comment);
     }
 
+    @PostMapping("/seed")
+    public ResponseEntity<?> seedComment(@RequestBody CommentDto request) throws Exception {
+        Comment comment = commentService.seedComment(request);
+        return ResponseEntity.ok(comment);
+    }
+
+
 
     @GetMapping("/get/video/{videoId}")
     public List<CommentDto> getComments (@PathVariable("videoId") Long videoId) {

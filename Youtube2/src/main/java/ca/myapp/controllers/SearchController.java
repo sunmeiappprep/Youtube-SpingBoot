@@ -1,6 +1,7 @@
 
 
 package ca.myapp.controllers;
+import ca.myapp.dto.VideoRequestDto;
 import ca.myapp.models.Video;
 import ca.myapp.service.SearchService;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,8 @@ public class SearchController {
 
     @GetMapping("/{SearchTerm}")
     public ResponseEntity<?> searchVideosByTitle(@PathVariable("SearchTerm") String SearchTerm) throws Exception {
-        List<Video> videos = searchService.findByTitle(SearchTerm);
+        List<VideoRequestDto> videos = searchService.findByTitle(SearchTerm);
+        System.out.println("Videos retrieved: " + videos);
         if (!videos.isEmpty()) {
             return ResponseEntity.ok(videos);
         } else {

@@ -11,6 +11,8 @@ public class VideoRequestDto {
     private String url;
     private String username;
     private String description;
+    @JsonProperty("id")
+    private Long videoId;
     private Long view;
 
     private LocalDate generatedDate;
@@ -22,9 +24,14 @@ public class VideoRequestDto {
         return view;
     }
 
-    public LocalDate generatedDate() {
+    public void setGeneratedDate(LocalDate generatedDate) {
+        this.generatedDate = generatedDate;
+    }
+
+    public LocalDate getGeneratedDate() {
         return generatedDate;
     }
+
 
     public String getUsername() {
         return username;
@@ -40,10 +47,6 @@ public class VideoRequestDto {
 
     public void setView(Long view) {
         this.view = view;
-    }
-
-    public void setGeneratedDate(LocalDate generatedDate) {
-        this.generatedDate = generatedDate;
     }
 
 
@@ -71,6 +74,14 @@ public class VideoRequestDto {
         this.description = description;
     }
 
+    public Long getVideoId() {
+        return videoId;
+    }
+
+    public void setVideoId(Long videoId) {
+        this.videoId = videoId;
+    }
+
     @Override
     public String toString() {
         return "VideoRequestDto{" +
@@ -81,6 +92,8 @@ public class VideoRequestDto {
                 ", description='" + description + '\'' +
                 ", view=" + view +
                 ", generatedDate=" + generatedDate +
+                ", videoId=" + videoId +
                 '}';
     }
+
 }

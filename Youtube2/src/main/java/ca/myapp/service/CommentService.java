@@ -47,6 +47,47 @@ public class CommentService {
     public Comment createComment(CommentDto request) throws Exception {
         //seeding
         //first seed with 1st
+//        User currentUser = userService.getRandomUser();//1st and 2nd
+//        Video video = videoService.getRandomVideo();//turn on for first layer of comment, 1st
+//        Comment randomParentComment = getRandomComment();//2nd
+//        Video video = videoRepository.findById(randomParentComment.getVideo().getId())//2nd
+//                .orElseThrow(() -> new idNotFoundException("There is no video id" + request.getVideoId()));
+////
+////
+
+         User currentUser = userService.getAuthenticatedUser();//Turn on when done seeding
+//         User currentUser = userService.findUserByUsername(request.getUsername());//Turn on when done seeding
+
+        Video video = videoRepository.findById(request.getVideoId())//Turn on when done seeding
+                .orElseThrow(() -> new idNotFoundException("There is no video id" + request.getVideoId()));
+
+        Comment comment = new Comment();
+        comment.setUser(currentUser);
+        comment.setVideo(video);
+        comment.setText(request.getText());
+
+        if (request.getParentId() != null) {//Turn on when done seeding
+            Optional<Comment> parentComment = commentRepository.findById(request.getParentId());
+            if (parentComment.isPresent()) {
+                comment.setParent(parentComment.get());
+            } else {
+                throw new IllegalArgumentException("Invalid parent comment ID: " + request.getParentId());
+            }
+        }
+
+//        System.out.println(randomParentComment);
+//        comment.setParent(randomParentComment);
+
+
+
+
+        return commentRepository.save(comment);
+    }
+
+
+    public Comment seedComment(CommentDto request) throws Exception {
+        //seeding
+        //first seed with 1st
         User currentUser = userService.getRandomUser();//1st and 2nd
 //        Video video = videoService.getRandomVideo();//turn on for first layer of comment, 1st
 //        Comment randomParentComment = getRandomComment();//2nd
