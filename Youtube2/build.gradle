@@ -30,6 +30,8 @@ dependencies {
     // end::security-dependencies[]
     // JAXB API
     implementation 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
+	implementation 'mysql:mysql-connector-java:8.0.29'
+
 
 // JAXB Runtime
     implementation 'org.glassfish.jaxb:jaxb-runtime:3.0.2'

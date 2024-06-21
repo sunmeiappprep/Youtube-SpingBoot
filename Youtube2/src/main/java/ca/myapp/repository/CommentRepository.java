@@ -10,6 +10,10 @@ import java.util.List;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
+
+    @Transactional
+    void deleteByVideoId(Long videoId);
+
     List<Comment> findByVideoId(Long VideoId);
     List<Comment> findByVideoIdOrderByCreatedAtDesc(long videoId);
 

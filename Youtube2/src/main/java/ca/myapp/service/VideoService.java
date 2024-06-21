@@ -2,8 +2,11 @@ package ca.myapp.service;
 
 import ca.myapp.dto.VideoRequestDto;
 import ca.myapp.exception.idNotFoundException;
+import ca.myapp.models.Comment;
 import ca.myapp.models.User;
 import ca.myapp.models.Video;
+import ca.myapp.repository.CommentReactionRepository;
+import ca.myapp.repository.CommentRepository;
 import ca.myapp.repository.SubscriptionRepository;
 import ca.myapp.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,13 @@ public class VideoService {
 
     @Autowired
     private SubscriptionRepository subscriptionRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
+    private CommentReactionRepository commentReactionRepository;
+
 
     private final VideoRepository videoRepository;
     private final UserService userService;
@@ -132,7 +142,17 @@ public class VideoService {
         if (!videoRepository.existsById(videoId)) {
             throw new idNotFoundException("Video not found with id: " + videoId);
         }
+
+        List<Comment> comments = commentRepository.findByVideoId(videoId);
+
+        for (Comment comment : comments) {
+            commentReactionRepository.deleteByCommentId(comment.getId());
+        }
+
+        commentRepository.deleteByVideoId(videoId);
+
         videoRepository.deleteById(videoId);
+
     }
 
     public Video getRandomVideo() {
