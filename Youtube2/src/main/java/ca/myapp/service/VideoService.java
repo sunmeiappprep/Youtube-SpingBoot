@@ -5,10 +5,7 @@ import ca.myapp.exception.idNotFoundException;
 import ca.myapp.models.Comment;
 import ca.myapp.models.User;
 import ca.myapp.models.Video;
-import ca.myapp.repository.CommentReactionRepository;
-import ca.myapp.repository.CommentRepository;
-import ca.myapp.repository.SubscriptionRepository;
-import ca.myapp.repository.VideoRepository;
+import ca.myapp.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,22 +22,27 @@ import java.util.concurrent.ThreadLocalRandom;
 @Service
 public class VideoService {
 
-    @Autowired
-    private SubscriptionRepository subscriptionRepository;
-
-    @Autowired
-    private CommentRepository commentRepository;
-
-    @Autowired
-    private CommentReactionRepository commentReactionRepository;
-
-
+    private final SubscriptionRepository subscriptionRepository;
+    private final CommentRepository commentRepository;
+    private final CommentReactionRepository commentReactionRepository;
     private final VideoRepository videoRepository;
     private final UserService userService;
-    @Autowired // This annotation is optional if there's only one constructor
-    public VideoService(VideoRepository videoRepository, UserService userService) {
+
+    private final PlaylistVideoRepository playlistVideoRepository;
+
+    @Autowired
+    public VideoService(SubscriptionRepository subscriptionRepository,
+                        CommentRepository commentRepository,
+                        CommentReactionRepository commentReactionRepository,
+                        VideoRepository videoRepository,
+                        UserService userService,
+                        PlaylistVideoRepository playlistVideoRepository) {
+        this.subscriptionRepository = subscriptionRepository;
+        this.commentRepository = commentRepository;
+        this.commentReactionRepository = commentReactionRepository;
         this.videoRepository = videoRepository;
         this.userService = userService;
+        this.playlistVideoRepository = playlistVideoRepository;
     }
     public Video findById(Long id) throws Exception {
         return videoRepository.findById(id)
@@ -150,6 +152,8 @@ public class VideoService {
         }
 
         commentRepository.deleteByVideoId(videoId);
+
+        playlistVideoRepository.deleteByVideoId(videoId);
 
         videoRepository.deleteById(videoId);
 

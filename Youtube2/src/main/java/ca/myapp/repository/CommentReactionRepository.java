@@ -17,6 +17,8 @@ public interface CommentReactionRepository extends JpaRepository<CommentReaction
 
     // Search for the commentId and count the liked that is false
     int countByCommentIdAndLikedFalse(Long commentId);
+
+    List<CommentReaction> findAllByCommentId(Long commentId);
     @Transactional
     void deleteByCommentId(Long commentId);
     List<CommentReaction> findByCommentIdIn(List<Long> commentIds);

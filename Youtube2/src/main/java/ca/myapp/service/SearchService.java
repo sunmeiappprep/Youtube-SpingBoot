@@ -2,6 +2,7 @@ package ca.myapp.service;
 import ca.myapp.dto.VideoRequestDto;
 import ca.myapp.models.Video;
 import ca.myapp.repository.VideoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +13,7 @@ public class SearchService {
 
     private final VideoRepository videoRepository;
 
+    @Autowired
     public SearchService(VideoRepository videoRepository) {
         this.videoRepository = videoRepository;
     }

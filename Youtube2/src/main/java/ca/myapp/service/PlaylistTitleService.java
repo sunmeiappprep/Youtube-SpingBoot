@@ -6,6 +6,7 @@ import ca.myapp.models.PlaylistTitle;
 import ca.myapp.models.User;
 import ca.myapp.models.Video;
 import ca.myapp.repository.PlaylistTitleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,9 +19,9 @@ import java.util.stream.Collectors;
 public class PlaylistTitleService {
 
     private final PlaylistTitleRepository playlistTitleRepository;
-
     private final UserService userService;
 
+    @Autowired
     public PlaylistTitleService(PlaylistTitleRepository playlistTitleRepository, UserService userService) {
         this.playlistTitleRepository = playlistTitleRepository;
         this.userService = userService;

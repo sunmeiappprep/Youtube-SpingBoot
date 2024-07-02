@@ -16,10 +16,12 @@ public class VideoReactionService {
     //create a different Model,Controller,Service,Rep because of separation of concerns
     private final VideoReactionRepository videoReactionRepository;
     private final VideoRepository videoRepository;
-
     private final UserService userService;
+
     @Autowired
-    public VideoReactionService(VideoReactionRepository videoReactionRepository, VideoRepository videoRepository, UserService userService) {
+    public VideoReactionService(VideoReactionRepository videoReactionRepository,
+                                VideoRepository videoRepository,
+                                UserService userService) {
         this.videoReactionRepository = videoReactionRepository;
         this.videoRepository = videoRepository;
         this.userService = userService;

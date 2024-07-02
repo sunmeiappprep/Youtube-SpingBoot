@@ -23,26 +23,30 @@ import java.util.stream.Collectors;
 @Service
 public class CommentService {
 
-    @Autowired
-    private CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
+    private final VideoRepository videoRepository;
+    private final UserService userService;
+    private final VideoService videoService;
+    private final CommentReactionRepository commentReactionRepository;
+    private final CommentReactionService commentReactionService;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private VideoRepository videoRepository;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private VideoService videoService;
-
-    @Autowired
-    private CommentReactionRepository commentReactionRepository;
-
-    @Autowired
-    private CommentReactionService commentReactionService;
+    public CommentService(CommentRepository commentRepository,
+                          UserRepository userRepository,
+                          VideoRepository videoRepository,
+                          UserService userService,
+                          VideoService videoService,
+                          CommentReactionRepository commentReactionRepository,
+                          CommentReactionService commentReactionService) {
+        this.commentRepository = commentRepository;
+        this.userRepository = userRepository;
+        this.videoRepository = videoRepository;
+        this.userService = userService;
+        this.videoService = videoService;
+        this.commentReactionRepository = commentReactionRepository;
+        this.commentReactionService = commentReactionService;
+    }
 
     public Comment createComment(CommentDto request) throws Exception {
         //seeding
@@ -190,6 +194,10 @@ public class CommentService {
         if (!comment.getUser().getId().equals(currentUser.getId())) {
             throw new ErrorToFrontEnd("User does not have permission to delete this comment");
         }
+
+        List<CommentReaction> reactions = commentReactionRepository.findAllByCommentId(commentId);
+        commentReactionRepository.deleteAll(reactions);
+
         commentRepository.deleteById(commentId);
     }
 

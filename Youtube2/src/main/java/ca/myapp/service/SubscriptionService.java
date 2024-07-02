@@ -12,12 +12,14 @@ import java.util.Optional;
 @Service
 public class SubscriptionService {
 
-    @Autowired
-    private SubscriptionRepository subscriptionRepository;
+    private final SubscriptionRepository subscriptionRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
+    public SubscriptionService(SubscriptionRepository subscriptionRepository, UserRepository userRepository) {
+        this.subscriptionRepository = subscriptionRepository;
+        this.userRepository = userRepository;
+    }
     public Subscription subscribe(Long subscriberId, Long channelId) {
         if (subscriberId.equals(channelId)) {
             throw new IllegalStateException("Cannot subscribe to yourself");

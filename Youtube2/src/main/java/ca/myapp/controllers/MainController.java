@@ -28,40 +28,22 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @ComponentScan(basePackages = {"ca.myapp.utility", "ca.myapp.controllers", "ca.myapp.service"})
 public class MainController {
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
+    private final UserService userService;
+    private final PlaylistTitleService playlistTitleService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private PlaylistTitleService playlistTitleService;
-
-    @GetMapping("/login")
-    public String login() {
-        return "login"; // Return the login.html template
+    public MainController(JwtUtil jwtUtil,
+                          UserService userService,
+                          AuthenticationManager authenticationManager,
+                          PlaylistTitleService playlistTitleService) {
+        this.jwtUtil = jwtUtil;
+        this.userService = userService;
+        this.playlistTitleService = playlistTitleService;
     }
 
-    @GetMapping("/register")
-    public String register() {
-        return "register"; // Return the login.html template
-    }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<?> loginUser(@RequestBody User loginUser) {
-//        try {
-//            // Authenticate user
-//            User authenticatedUser = userService.authenticate(loginUser.getUsername(), loginUser.getPassword());
-//            System.out.println("Login");
-//            return ResponseEntity.ok(authenticatedUser);
-//        } catch (Exception e) {
-//            throw new ResponseStatusException(
-//                    HttpStatus.UNAUTHORIZED, "Username or Password is incorrect", e);
-//        }
-//    }
+
     public static class LoginResponse {
         private User user;
         private String jwtToken;
@@ -90,7 +72,7 @@ public class MainController {
     }
 
 
-    @PostMapping("/login")
+    @PostMapping("/user/login")
     public ResponseEntity<?> loginUser(@RequestBody User loginUser) {
         try {
             User authenticatedUser = userService.authenticate(loginUser.getUsername(), loginUser.getPassword());
@@ -117,17 +99,8 @@ public class MainController {
         System.out.println("ensureUserPlaylists ran");
     }
 
-    @GetMapping("/testing")
-    public ResponseEntity<?>  testingEndpoint(Authentication authentication) {
-        System.out.println("Endpoint '/testing' accessed by: " );
-        String username = authentication.getName(); // Get the username of the authenticated user
-        System.out.println("Endpoint '/testing' accessed by: " + username);
 
-        return ResponseEntity.ok("asdasdasd");
-    }
-
-
-    @PostMapping("/register")
+    @PostMapping("/user/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         System.out.println("Welcome");
         try {
