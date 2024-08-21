@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
-
+import java.util.Optional;
 
 
 @RestController
@@ -114,16 +114,20 @@ public class UserController {
         }
     }
 
-//    @GetMapping("/checkJWT")
-//    public ResponseEntity<String> getAuthenticatedUser() {
-//
-//        User user = userService.getAuthenticatedUser();
-//        if (user != null) {
-//            return ResponseEntity.ok("AUTHORIZED");
-//        } else {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//        }
-//    }
+    @GetMapping("/userInfo/{userId}")
+    public ResponseEntity<?> getUserById(@PathVariable Long userId) {
+        try {
+            Optional<User> user = userService.findUserById(userId);
+            return ResponseEntity.ok(user); // Return 200 with User object
+        } catch (UsernameNotFoundException e) {
+            System.out.println("User not found");
+            return ResponseEntity.status(404).body("User not found"); // Return 404 with error message
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
+            return ResponseEntity.status(500).body("Internal Server Error"); // Return 500 with generic error message
+        }
+    }
+
 
     @GetMapping("/checkJWT")
     public ResponseEntity<Boolean> checkJWT(@RequestHeader("Authorization") String token) {

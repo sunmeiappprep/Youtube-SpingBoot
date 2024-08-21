@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 import ca.myapp.models.User;
 
+import java.time.LocalDateTime;
+
 @Component
 public class DefaultUsersRunner implements CommandLineRunner {
 
@@ -17,14 +19,14 @@ public class DefaultUsersRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         // Check if the default user exists
-        String defaultUsername = "asdasd1@gmail.com";
+        String defaultUsername = "DemoUser";
         User existingUser = userRepository.findByUsername(defaultUsername);
         if (existingUser == null) {
-            // Create and save the default user
+
             User newUser = new User();
             newUser.setUsername(defaultUsername);
             newUser.setPassword("asdasd"); // Consider encrypting this
-            // Set other necessary fields...
+            newUser.setCreatedAt(LocalDateTime.now());
             userService.registerNewUserAccount(newUser);
             System.out.println("Default user created");
         }

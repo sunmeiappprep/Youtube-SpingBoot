@@ -3,7 +3,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.security.core.GrantedAuthority;
+
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -34,11 +37,17 @@ public class User {
     @OneToMany(mappedBy = "channel")
     private List<Subscription> subscribers;
 
+    @Column(nullable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
+    private LocalDateTime createdAt;
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
+                ", createdAt=" + createdAt +
                 '}';
     }
 
@@ -77,6 +86,14 @@ public class User {
 
     public void setVideos(Set<Video> videos) {
         this.videos = videos;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
 }

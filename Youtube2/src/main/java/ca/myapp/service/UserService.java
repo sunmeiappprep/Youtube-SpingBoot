@@ -11,6 +11,7 @@ import ca.myapp.repository.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,11 +32,16 @@ public class UserService implements UserDetailsService {
             throw new Exception("There is an account with that username: " + user.getUsername());
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setCreatedAt(LocalDateTime.now());
         return userRepository.save(user);
     }
 
     public User findUserByUsername(String username) throws Exception {
         return userRepository.findByUsername(username);
+    }
+
+    public Optional<User> findUserById(Long userId) throws Exception {
+        return userRepository.findById(userId);
     }
 
 
